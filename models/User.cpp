@@ -1,0 +1,18 @@
+#include "User.h";
+
+User::User(const int id, std::string name, std::string password, std::string email,
+           const bool allow_anonymous_questions)
+    : Id(id), Name(std::move(name)), Password(std::move(password)), Email(std::move(email)),
+      ALLOW_ANONYMOUS_QUESTIONS(allow_anonymous_questions) {}
+
+int User::GetId() const { return Id; }
+
+const std::string& User::GetName() const { return Name; }
+
+const std::string& User::GetPassword() const { return Password; }
+
+const std::string& User::GetEmail() const { return Email; }
+
+const bool User::IsAnonymousQuestionsAllowed() const {
+    return ALLOW_ANONYMOUS_QUESTIONS;
+}
