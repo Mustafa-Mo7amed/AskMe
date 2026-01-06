@@ -13,6 +13,6 @@ const std::string& User::GetPassword() const { return Password; }
 
 const std::string& User::GetEmail() const { return Email; }
 
-const bool User::IsAnonymousQuestionsAllowed() const {
+bool User::IsAnonymousQuestionsAllowed() const {
     return ALLOW_ANONYMOUS_QUESTIONS;
 }

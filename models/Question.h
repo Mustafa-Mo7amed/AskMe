@@ -1,3 +1,4 @@
+#pragma once
 #include <string>
 
 class Question {
@@ -13,6 +14,11 @@ public:
     Question(int id, std::string question_text, int to_user_id, int from_user_id, int parent_id,
              bool is_anonymous);
 
+    Question(int id, std::string question_text, std::string answer_text, int to_user_id, int from_user_id, int parent_id,
+             bool is_anonymous);
+
+    [[nodiscard]] int GetId() const;
+
     [[nodiscard]] const std::string& GetQuestionText() const;
 
     void SetQuestionText(std::string question_text);
@@ -21,9 +27,11 @@ public:
 
     void SetAnswerText(std::string answer_text);
 
-    [[nodiscard]] const int GetToUserId() const;
+    [[nodiscard]] int GetToUserId() const;
 
-    [[nodiscard]] const int GetFromUserId() const;
+    [[nodiscard]] int GetFromUserId() const;
 
-    [[nodiscard]] const bool IsAnonymous() const;
+    [[nodiscard]] bool IsAnonymous() const;
+
+    [[nodiscard]] bool IsAnswered() const;
 };

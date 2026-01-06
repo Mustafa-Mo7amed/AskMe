@@ -1,0 +1,85 @@
+#include <stdexcept>
+#include "QuestionsRepository.h"
+
+int QuestionsRepository::LastId = 100;
+
+int QuestionsRepository::GenerateId() {
+    ++LastId;
+    return LastId;
+}
+
+void QuestionsRepository::LoadUsers() {}
+
+void QuestionsRepository::SaveChanges() {}
+
+const std::map<int, Question>& QuestionsRepository::GetAllQuestions() const {
+    return questions;
+}
+
+std::map<int, Question> QuestionsRepository::GetAllAnsweredQuestions() const {
+    std::map<int, Question> answered_questions;
+    for (auto& [id, question] : questions) {
+        if (question.IsAnswered()) {
+            answered_questions.emplace(id, question);
+        }
+    }
+    return answered_questions;
+}
+
+std::map<int, Question> QuestionsRepository::GetQuestionsFromUser(int user_id) const {
+    std::map<int, Question> user_questions;
+    for (auto& [id, question] : questions) {
+        if (question.GetFromUserId() == user_id) {
+            user_questions.emplace(id, question);
+        }
+    }
+    return user_questions;
+}
+
+std::map<int, Question> QuestionsRepository::GetQuestionsToUser(int user_id) const {
+    std::map<int, Question> user_questions;
+    for (auto& [id, question] : questions) {
+        if (question.GetToUserId() == user_id) {
+            user_questions.emplace(id, question);
+        }
+    }
+    return user_questions;
+}
+
+Question QuestionsRepository::FindById(int id) const {
+    auto it = questions.find(id);
+    if (it == questions.end())
+        throw std::runtime_error("Question not found");
+    return it->second;
+}
+
+bool QuestionsRepository::DeleteQuestion(int id) {
+    auto it = questions.find(id);
+    if (it == questions.end())
+        throw std::runtime_error("cannot delete question not found");
+    questions.erase(it);
+    return true;
+}
+
+Question QuestionsRepository::AddQuestion(Question question) {
+    auto [it, inserted] = questions.emplace(question.GetId(), question);
+    if (!inserted) {
+        throw std::runtime_error("failed to add question");
+    }
+    return it->second;
+}
+
+Question QuestionsRepository::AddQuestion(int parent_id,
+                                     std::string question_text,
+                                     int to_user_id,
+                                     int from_user_id,
+                                     bool is_anonymous) {
+
+    Question question(GenerateId(), std::move(question_text), to_user_id,
+                      from_user_id, parent_id, is_anonymous);
+    auto [it, inserted] = questions.emplace(question.GetId(), question);
+    if (!inserted) {
+        throw std::runtime_error("failed to add question");
+    }
+    return it->second;
+}

@@ -3,12 +3,28 @@
 #include "../core/Validator.h";
 
 Question::Question(int id, std::string question_text, int to_user_id, int from_user_id, int parent_id,
-                   bool is_anonymous): Id(id), QuestionText(std::move(question_text)), ToUserId(to_user_id),
-                                       FromUserId(from_user_id), ParentId(parent_id), IS_ANONYMOUS(is_anonymous) {}
+                   bool is_anonymous): Id(id),
+                                       QuestionText(std::move(question_text)),
+                                       ToUserId(to_user_id),
+                                       FromUserId(from_user_id),
+                                       ParentId(parent_id),
+                                       IS_ANONYMOUS(is_anonymous) {}
 
-[[nodiscard]] const std::string& Question::GetQuestionText() const { return QuestionText; }
+Question::Question(int id, std::string question_text, std::string answer_text, int to_user_id, int from_user_id,
+                   int parent_id,
+                   bool is_anonymous): Id(id),
+                                       QuestionText(std::move(question_text)),
+                                       AnswerText(std::move(answer_text)),
+                                       ToUserId(to_user_id),
+                                       FromUserId(from_user_id),
+                                       ParentId(parent_id),
+                                       IS_ANONYMOUS(is_anonymous) {}
 
-[[nodiscard]] const std::string& Question::GetAnswerText() const { return AnswerText; }
+int Question::GetId() const { return Id; }
+
+const std::string& Question::GetQuestionText() const { return QuestionText; }
+
+const std::string& Question::GetAnswerText() const { return AnswerText; }
 
 void Question::SetAnswerText(std::string answer_text) {
     if (Validator::IsEmptyOrBlank(answer_text)) {
@@ -17,8 +33,10 @@ void Question::SetAnswerText(std::string answer_text) {
     AnswerText = std::move(answer_text);
 }
 
-[[nodiscard]] const int Question::GetToUserId() const { return ToUserId; }
+int Question::GetToUserId() const { return ToUserId; }
 
-[[nodiscard]] const int Question::GetFromUserId() const { return ToUserId; }
+int Question::GetFromUserId() const { return ToUserId; }
 
-[[nodiscard]] const bool Question::IsAnonymous() const { return IS_ANONYMOUS; }
+bool Question::IsAnonymous() const { return IS_ANONYMOUS; }
+
+bool Question::IsAnswered() const { return !Validator::IsEmptyOrBlank(GetAnswerText()); }

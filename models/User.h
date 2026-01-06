@@ -1,3 +1,4 @@
+#pragma once
 #include <string>
 
 class User {
@@ -19,5 +20,7 @@ public:
 
     [[nodiscard]] const std::string& GetEmail() const;
 
-    [[nodiscard]] const bool IsAnonymousQuestionsAllowed() const;
+    [[nodiscard]] bool IsAnonymousQuestionsAllowed() const;
+
+
 };
