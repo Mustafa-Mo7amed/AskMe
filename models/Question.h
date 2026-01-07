@@ -21,8 +21,6 @@ public:
 
     [[nodiscard]] const std::string& GetQuestionText() const;
 
-    void SetQuestionText(std::string question_text);
-
     [[nodiscard]] const std::string& GetAnswerText() const;
 
     void SetAnswerText(std::string answer_text);

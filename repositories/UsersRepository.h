@@ -1,6 +1,6 @@
 #pragma once
 #include <map>
-#include <models/User.h>
+#include "models/User.h"
 
 class UsersRepository {
     static int LastId;
@@ -17,5 +17,7 @@ public:
 
     [[nodiscard]] const User& FindById(int id) const;
 
-    User AddUser(std::string name, std::string password, std::string email, bool allow_anonymous_questions);
+    const User& AddUser(std::string name, std::string password, std::string email, bool allow_anonymous_questions);
+
+    bool SetAllowAnonymousQuestions(int user_id, bool allow);
 };

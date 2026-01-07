@@ -1,6 +1,7 @@
 #pragma once
 #include <map>
-#include <models/Question.h>
+#include <vector>
+#include "models/Question.h"
 
 class QuestionsRepository {
     static int LastId;
@@ -21,15 +22,17 @@ public:
 
     [[nodiscard]] std::map<int, Question> GetQuestionsToUser(int user_id) const;
 
-    [[nodiscard]] Question FindById(int id) const;
+    [[nodiscard]] const Question& FindById(int id) const;
 
     bool DeleteQuestion(int id);
 
-    Question AddQuestion(Question question);
+    const Question& AddQuestion(Question question);
 
-    Question AddQuestion(int parent_id,
+    const Question& AddQuestion(int parent_id,
                     std::string question_text,
                     int to_user_id,
                     int from_user_id,
                     bool is_anonymous);
+
+    const Question& AnswerQuestion(int question_id, std::string answer_text);
 };

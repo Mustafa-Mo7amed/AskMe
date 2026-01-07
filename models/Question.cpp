@@ -1,6 +1,6 @@
 #include <stdexcept>
 #include "Question.h";
-#include "../core/Validator.h";
+#include "core/Validator.h";
 
 Question::Question(int id, std::string question_text, int to_user_id, int from_user_id, int parent_id,
                    bool is_anonymous): Id(id),

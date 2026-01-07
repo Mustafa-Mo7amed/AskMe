@@ -1,6 +1,9 @@
 #include <stdexcept>
 #include "QuestionsRepository.h"
 
+#include "core/Validator.h"
+
+// TODO: should be the last question's id
 int QuestionsRepository::LastId = 100;
 
 int QuestionsRepository::GenerateId() {
@@ -46,7 +49,7 @@ std::map<int, Question> QuestionsRepository::GetQuestionsToUser(int user_id) con
     return user_questions;
 }
 
-Question QuestionsRepository::FindById(int id) const {
+const Question& QuestionsRepository::FindById(int id) const {
     auto it = questions.find(id);
     if (it == questions.end())
         throw std::runtime_error("Question not found");
@@ -61,7 +64,7 @@ bool QuestionsRepository::DeleteQuestion(int id) {
     return true;
 }
 
-Question QuestionsRepository::AddQuestion(Question question) {
+const Question& QuestionsRepository::AddQuestion(Question question) {
     auto [it, inserted] = questions.emplace(question.GetId(), question);
     if (!inserted) {
         throw std::runtime_error("failed to add question");
@@ -69,17 +72,28 @@ Question QuestionsRepository::AddQuestion(Question question) {
     return it->second;
 }
 
-Question QuestionsRepository::AddQuestion(int parent_id,
-                                     std::string question_text,
-                                     int to_user_id,
-                                     int from_user_id,
-                                     bool is_anonymous) {
-
+const Question& QuestionsRepository::AddQuestion(int parent_id,
+                                                 std::string question_text,
+                                                 int to_user_id,
+                                                 int from_user_id,
+                                                 bool is_anonymous) {
     Question question(GenerateId(), std::move(question_text), to_user_id,
                       from_user_id, parent_id, is_anonymous);
     auto [it, inserted] = questions.emplace(question.GetId(), question);
     if (!inserted) {
         throw std::runtime_error("failed to add question");
     }
+    return it->second;
+}
+
+const Question& QuestionsRepository::AnswerQuestion(int question_id, std::string answer_text) {
+    if (!Validator::IsEmptyOrBlank(answer_text)) {
+        throw std::invalid_argument("answer text cannot be empty");
+    }
+    auto it = questions.find(question_id);
+    if (it == questions.end()) {
+        throw std::runtime_error("Question not found");
+    }
+    it->second.SetAnswerText(std::move(answer_text));
     return it->second;
 }

@@ -6,7 +6,7 @@ class User {
     std::string Name;
     std::string Password;
     std::string Email;
-    const bool ALLOW_ANONYMOUS_QUESTIONS;
+    bool AllowAnonymousQuestions;
 
 public:
     User(int id, std::string name, std::string password, std::string email,
@@ -22,5 +22,5 @@ public:
 
     [[nodiscard]] bool IsAnonymousQuestionsAllowed() const;
 
-
+    bool SetAllowAnonymousQuestions(bool allowed);
 };
