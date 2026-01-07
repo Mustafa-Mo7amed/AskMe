@@ -7,7 +7,7 @@ class QuestionService {
     QuestionsRepository& repository;
     [[nodiscard]] std::vector<Question> VectorizeMap(const std::map<int, Question>& map) const;
 public:
-    QuestionService(QuestionsRepository& repo);
+    explicit QuestionService(QuestionsRepository& repo);
 
     [[nodiscard]] std::vector<Question> GetFeed() const;
 

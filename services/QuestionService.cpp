@@ -1,7 +1,3 @@
-//
-// Created by mosta on 1/7/2026.
-//
-
 #include "QuestionService.h"
 
 std::vector<Question> QuestionService::VectorizeMap(const std::map<int, Question>& map) const {

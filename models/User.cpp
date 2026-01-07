@@ -1,4 +1,4 @@
-#include "User.h";
+#include "User.h"
 
 User::User(const int id, std::string name, std::string password, std::string email,
            const bool allow_anonymous_questions)

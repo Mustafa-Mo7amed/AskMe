@@ -1,6 +1,7 @@
-#include "Validator.h"
-#include <bits/ranges_algo.h>
 #include <regex>
+#include <algorithm>
+#include <bits/ranges_algo.h>
+#include "Validator.h"
 
 bool Validator::IsEmptyOrBlank(const std::string& str) {
     return str.empty() || std::ranges::all_of(str.begin(), str.end(), [](const char c) {
