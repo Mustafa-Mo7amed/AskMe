@@ -22,6 +22,8 @@ Question::Question(int id, std::string question_text, std::string answer_text, i
 
 int Question::GetId() const { return Id; }
 
+int Question::GetParentId() const { return ParentId; }
+
 const std::string& Question::GetQuestionText() const { return QuestionText; }
 
 const std::string& Question::GetAnswerText() const { return AnswerText; }

@@ -1,6 +1,6 @@
 #include "QuestionService.h"
 
-std::vector<Question> QuestionService::VectorizeMap(const std::map<int, Question>& map) const {
+std::vector<Question> QuestionService::QuestionMapValues(const std::map<int, Question>& map) const {
     const std::map<int, Question>& questions_map = map;
     std::vector<Question> questions;
     questions.reserve(questions_map.size());
@@ -12,16 +12,16 @@ std::vector<Question> QuestionService::VectorizeMap(const std::map<int, Question
 
 QuestionService::QuestionService(QuestionsRepository& repo): repository(repo) {}
 
-std::vector<Question> QuestionService::GetFeed() const {
-    return VectorizeMap(repository.GetAllAnsweredQuestions());
+std::map<int, Question> QuestionService::GetFeed() const {
+    return repository.GetAllAnsweredQuestions();
 }
 
-std::vector<Question> QuestionService::GetQuestionsToUser(int user_id) const {
-    return VectorizeMap(repository.GetQuestionsToUser(user_id));
+std::map<int, Question> QuestionService::GetQuestionsToUser(int user_id) const {
+    return repository.GetQuestionsToUser(user_id);
 }
 
-std::vector<Question> QuestionService::GetQuestionsFromUser(int user_id) const {
-    return VectorizeMap(repository.GetQuestionsFromUser(user_id));
+std::map<int, Question> QuestionService::GetQuestionsFromUser(int user_id) const {
+    return repository.GetQuestionsFromUser(user_id);
 }
 
 const Question& QuestionService::AskQuestion(int parent_id, std::string question_text, int to_user_id, int from_user_id,

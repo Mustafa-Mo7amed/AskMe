@@ -18,6 +18,7 @@ public:
              bool is_anonymous);
 
     [[nodiscard]] int GetId() const;
+    [[nodiscard]] int GetParentId() const;
 
     [[nodiscard]] const std::string& GetQuestionText() const;
 
