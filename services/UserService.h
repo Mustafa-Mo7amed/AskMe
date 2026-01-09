@@ -1,5 +1,7 @@
 #pragma once
 #include <map>
+#include <vector>
+#include <optional>
 #include "models/User.h"
 #include "repositories/UsersRepository.h"
 
@@ -9,7 +11,14 @@ class UserService {
 public:
     explicit UserService(UsersRepository& repo);
 
+    [[nodiscard]] std::vector<User> UserMapValues(const std::map<int, User>& map) const;
+
     [[nodiscard]] const std::map<int, User>& GetAllUsers() const;
+
+    [[nodiscard]] std::optional<User> FindUser(int id) const;
+
+    [[nodiscard]] const User& AddUser(std::string name, std::string password, std::string email,
+                                      bool allow_anonymous_questions) const;
 
     bool SetAllowAnonymousQuestions(int user_id, bool allow) const;
 };

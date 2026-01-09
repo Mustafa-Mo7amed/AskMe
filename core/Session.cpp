@@ -1,9 +1,10 @@
+#include <optional>
 #include "Session.h"
 
-void Session::Login(User* user) { CurrentUser = user; }
+void Session::Login(User user) { CurrentUser = std::move(user); }
 
-void Session::Logout() { CurrentUser = nullptr; }
+void Session::Logout() { CurrentUser = std::nullopt; }
 
-bool Session::IsLoggedIn() const { return CurrentUser != nullptr; }
+bool Session::IsLoggedIn() const { return CurrentUser != std::nullopt; }
 
-const User* Session::GetCurrentUser() const { return CurrentUser; }
+std::optional<User> Session::GetCurrentUser() const { return CurrentUser; }

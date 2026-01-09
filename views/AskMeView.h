@@ -8,18 +8,21 @@
 #include "DTO/UserLoginData.h"
 
 class AskMeView {
-    int get_int(const std::string& message = "", int min_value = INT_MIN, int max_value = INT_MAX) const;
+    [[nodiscard]] static int get_int(const std::string& message = "", int min_value = INT_MIN,
+                                     int max_value = INT_MAX);
 
-    [[nodiscard]] std::string get_string(const std::string& message = "", int max_size = INT_MAX) const;
+    [[nodiscard]] static std::string get_string(const std::string& message = "", int max_size = INT_MAX);
 
-    void print(const std::string& message, int depth = 0, bool newline = false) const;
+    static void print(const std::string& message, int depth = 0, bool newline = false);
 
-    void printQuestionThread(int node, int parent, const std::map<int, Question>& questions,
-                       const std::map<int, std::vector<int>>& adj, int depth) const;
+    static void printQuestionThread(int node, const std::map<int, Question>& questions,
+                                    const std::map<int, std::vector<int>>& adj, int depth);
 
-    void printQuestionsList(const std::map<int, Question>& questions) const;
+    static void printQuestionsList(const std::map<int, Question>& questions);
 
-    [[nodiscard]] std::string format_question(const Question& question, bool include_answer) const;
+    [[nodiscard]] static std::string format_question(const Question& question, bool include_answer);
+
+    [[nodiscard]] static bool checkAnswerYesNo(std::string answer);
 
 public:
     [[nodiscard]] int ShowAuthMenu() const;
@@ -30,13 +33,15 @@ public:
 
     [[nodiscard]] UserLoginData ShowLoginForm() const;
 
+    void ShowWrongIdOrPassword() const;
+
     [[nodiscard]] int ShowMainMenu() const;
 
     void ShowQuestionsToMe(const std::map<int, Question>& questions) const;
 
     void ShowQuestionsFromMe(const std::map<int, Question>& questions) const;
 
-    [[nodiscard]] int ShowAnswerQuestion() const;
+    [[nodiscard]] int ShowRequestQuestionIdToAnswer() const;
 
     [[nodiscard]] std::string ShowQuestionToAnswer(const Question& question) const;
 
@@ -44,11 +49,21 @@ public:
 
     [[nodiscard]] int ShowRequestUserIdToAskQuestion() const;
 
-    [[nodiscard]] int ShowRequestQuestionIdForThread(const User& user) const;
+    [[nodiscard]] bool ShowRequestAnonymousQuestion(const User& user) const;
+
+    [[nodiscard]] int ShowRequestQuestionIdForThread() const;
 
     [[nodiscard]] std::string ShowRequestQuestionText() const;
 
     void ShowSystemUsers(const std::vector<User>& users) const;
 
     void ShowFeed(const std::vector<Question>& questions) const;
+
+    [[nodiscard]] bool AnonymousQuestionsConfiguration() const;
+
+    void ShowWrongMainMenuInput() const;
+
+    void ShowQuestionNotFound() const;
+
+    void ShowUserNotFound() const;
 };

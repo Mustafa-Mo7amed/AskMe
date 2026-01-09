@@ -37,7 +37,7 @@ void Question::SetAnswerText(std::string answer_text) {
 
 int Question::GetToUserId() const { return ToUserId; }
 
-int Question::GetFromUserId() const { return ToUserId; }
+int Question::GetFromUserId() const { return FromUserId; }
 
 bool Question::IsAnonymous() const { return IS_ANONYMOUS; }
 

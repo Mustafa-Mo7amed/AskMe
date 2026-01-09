@@ -1,5 +1,6 @@
 #pragma once
 #include <map>
+#include <optional>
 #include "models/Question.h"
 
 class QuestionsRepository {
@@ -21,7 +22,7 @@ public:
 
     [[nodiscard]] std::map<int, Question> GetQuestionsToUser(int user_id) const;
 
-    [[nodiscard]] const Question& FindById(int id) const;
+    [[nodiscard]] std::optional<Question> FindById(int id) const;
 
     bool DeleteQuestion(int id);
 
@@ -33,5 +34,5 @@ public:
                     int from_user_id,
                     bool is_anonymous);
 
-    const Question& AnswerQuestion(int question_id, std::string answer_text);
+    std::optional<Question> AnswerQuestion(int question_id, std::string answer_text);
 };

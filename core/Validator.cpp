@@ -13,3 +13,11 @@ bool Validator::IsValidEmail(const std::string& email) {
     static const std::regex pattern(R"(^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$)");
     return std::regex_match(email, pattern);
 }
+
+bool Validator::IsValidPassword(const std::string& password) {
+    for (char c : password) {
+        if (c <= 32 || c >= 127)
+            return false;
+    }
+    return true;
+}

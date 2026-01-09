@@ -15,7 +15,7 @@ class UsersRepository {
 public:
     [[nodiscard]] const std::map<int, User>& GetAllUsers() const;
 
-    [[nodiscard]] const User& FindById(int id) const;
+    [[nodiscard]] std::optional<User> FindById(int id) const;
 
     const User& AddUser(std::string name, std::string password, std::string email, bool allow_anonymous_questions);
 

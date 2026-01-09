@@ -1,5 +1,6 @@
-#include "UsersRepository.h"
 #include <stdexcept>
+#include <optional>
+#include "UsersRepository.h"
 
 // TODO: should be the last user's id
 int UsersRepository::LastId = 100;
@@ -15,10 +16,10 @@ void UsersRepository::SaveChanges() {}
 
 const std::map<int, User>& UsersRepository::GetAllUsers() const { return users; }
 
-const User& UsersRepository::FindById(int id) const {
+std::optional<User> UsersRepository::FindById(int id) const {
     auto it = users.find(id);
     if (it == users.end()) {
-        throw std::runtime_error("User not found");
+        return std::nullopt;
     }
     return it->second;
 }
@@ -36,6 +37,7 @@ const User& UsersRepository::AddUser(std::string name, std::string password, std
 bool UsersRepository::SetAllowAnonymousQuestions(int user_id, bool allow) {
     auto it = users.find(user_id);
     if (it == users.end())
-        throw std::runtime_error("User not found");
-    return it->second.SetAllowAnonymousQuestions(allow);
+        return false;
+    it->second.SetAllowAnonymousQuestions(allow);
+    return true;
 }

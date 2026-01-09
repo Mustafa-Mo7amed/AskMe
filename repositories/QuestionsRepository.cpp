@@ -1,6 +1,6 @@
 #include <stdexcept>
+#include <optional>
 #include "QuestionsRepository.h"
-
 #include "core/Validator.h"
 
 // TODO: should be the last question's id
@@ -49,26 +49,23 @@ std::map<int, Question> QuestionsRepository::GetQuestionsToUser(int user_id) con
     return user_questions;
 }
 
-const Question& QuestionsRepository::FindById(int id) const {
+std::optional<Question> QuestionsRepository::FindById(int id) const {
     auto it = questions.find(id);
     if (it == questions.end())
-        throw std::runtime_error("Question not found");
+        return std::nullopt;
     return it->second;
 }
 
 bool QuestionsRepository::DeleteQuestion(int id) {
     auto it = questions.find(id);
     if (it == questions.end())
-        throw std::runtime_error("cannot delete question not found");
+        return false;
     questions.erase(it);
     return true;
 }
 
 const Question& QuestionsRepository::AddQuestion(Question question) {
     auto [it, inserted] = questions.emplace(question.GetId(), question);
-    if (!inserted) {
-        throw std::runtime_error("failed to add question");
-    }
     return it->second;
 }
 
@@ -80,19 +77,16 @@ const Question& QuestionsRepository::AddQuestion(int parent_id,
     Question question(GenerateId(), std::move(question_text), to_user_id,
                       from_user_id, parent_id, is_anonymous);
     auto [it, inserted] = questions.emplace(question.GetId(), question);
-    if (!inserted) {
-        throw std::runtime_error("failed to add question");
-    }
     return it->second;
 }
 
-const Question& QuestionsRepository::AnswerQuestion(int question_id, std::string answer_text) {
+std::optional<Question> QuestionsRepository::AnswerQuestion(int question_id, std::string answer_text) {
     if (!Validator::IsEmptyOrBlank(answer_text)) {
         throw std::invalid_argument("answer text cannot be empty");
     }
     auto it = questions.find(question_id);
     if (it == questions.end()) {
-        throw std::runtime_error("Question not found");
+        return std::nullopt;
     }
     it->second.SetAnswerText(std::move(answer_text));
     return it->second;
