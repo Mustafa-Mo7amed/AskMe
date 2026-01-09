@@ -16,11 +16,11 @@ class AskMeView {
     static void print(const std::string& message, int depth = 0, bool newline = false);
 
     static void printQuestionThread(int node, const std::map<int, Question>& questions,
-                                    const std::map<int, std::vector<int>>& adj, int depth);
+                                    const std::map<int, std::vector<int>>& adj, int depth, bool only_answered = false);
 
-    static void printQuestionsList(const std::map<int, Question>& questions);
+    static void printQuestionsList(const std::map<int, Question>& questions, bool only_answered = false);
 
-    [[nodiscard]] static std::string format_question(const Question& question, bool include_answer);
+    [[nodiscard]] static std::string format_question(const Question& question, bool include_answer, int depth = 0);
 
     [[nodiscard]] static bool checkAnswerYesNo(std::string answer);
 
@@ -57,7 +57,7 @@ public:
 
     void ShowSystemUsers(const std::vector<User>& users) const;
 
-    void ShowFeed(const std::vector<Question>& questions) const;
+    void ShowFeed(const std::map<int, Question>& questions) const;
 
     [[nodiscard]] bool AnonymousQuestionsConfiguration() const;
 

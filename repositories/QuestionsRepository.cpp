@@ -81,7 +81,7 @@ const Question& QuestionsRepository::AddQuestion(int parent_id,
 }
 
 std::optional<Question> QuestionsRepository::AnswerQuestion(int question_id, std::string answer_text) {
-    if (!Validator::IsEmptyOrBlank(answer_text)) {
+    if (Validator::IsEmptyOrBlank(answer_text)) {
         throw std::invalid_argument("answer text cannot be empty");
     }
     auto it = questions.find(question_id);

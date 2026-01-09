@@ -142,7 +142,7 @@ void AskMeController::SystemUsers() const {
 }
 
 void AskMeController::Feed() const {
-    auto questions = question_service.QuestionMapValues(question_service.GetFeed());
+    auto questions = question_service.GetFeed();
     askme_view.ShowFeed(questions);
 }
 
