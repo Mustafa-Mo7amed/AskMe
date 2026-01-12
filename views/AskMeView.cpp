@@ -2,6 +2,7 @@
 #include <iostream>
 #include <format>
 #include <map>
+#include <limits>
 #include "AskMeView.h"
 #include "core/Validator.h"
 
@@ -9,8 +10,13 @@ int AskMeView::get_int(const std::string& message, int min_value, int max_value)
     int value;
     do {
         print(message);
-        std::cin >> value;
-        std::cin.ignore();
+        if (!(std::cin >> value)) {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            print("ERROR: please enter a valid number", 0, true);
+            continue;
+        }
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         if (value < min_value || value > max_value)
             print("ERROR: invalid number...try again");
     } while (value < min_value || value > max_value);
@@ -41,12 +47,10 @@ void AskMeView::printQuestionThread(int node, const std::map<int, Question>& que
     if (!questions.contains(node)) {
         return;
     }
-    if (!only_answered || (only_answered && questions.at(node).IsAnswered())) {
-        print(format_question(questions.at(node), questions.at(node).IsAnswered(), depth), 0, true);
-    }
-    else {
+    if (only_answered && !questions.at(node).IsAnswered()) {
         return;
     }
+    print(format_question(questions.at(node), questions.at(node).IsAnswered(), depth), 0, true);
     if (!adj.contains(node)) {
         return;
     }
@@ -176,8 +180,7 @@ int AskMeView::ShowMainMenu() const {
     print("8: Anonymous Questions Configuration", 1, true);
     print("9: Logout", 1, true);
 
-    print("Enter a number in range 1 - 9:");
-    return get_int("", 1, 9);
+    return get_int("Enter a number in range 1 - 9:", 1, 9);
 }
 
 void AskMeView::ShowQuestionsToMe(const std::map<int, Question>& questions) const {
@@ -190,7 +193,7 @@ void AskMeView::ShowQuestionsFromMe(const std::map<int, Question>& questions) co
 }
 
 int AskMeView::ShowRequestQuestionIdToAnswer() const {
-    print("Enter Question id or -1 to cancel:");
+    print("Enter Question id or -1 for a new question:");
     return get_int();
 }
 
@@ -207,6 +210,10 @@ std::string AskMeView::ShowQuestionToAnswer(const Question& question) const {
 int AskMeView::ShowDeleteQuestion() const {
     print("Enter Question id or -1 to cancel:");
     return get_int();
+}
+
+void AskMeView::ShowDeleteQuestionSuccess() const {
+    print("Question delete successfully", 0, true);
 }
 
 int AskMeView::ShowRequestUserIdToAskQuestion() const {
@@ -248,6 +255,10 @@ bool AskMeView::AnonymousQuestionsConfiguration() const {
     return checkAnswerYesNo(std::move(get_string()));
 }
 
+void AskMeView::ShowAnonymousQuestionsConfigurationSuccess() const {
+    print("Settings saved successfully", 0, true);
+}
+
 void AskMeView::ShowWrongMainMenuInput() const {
     print("ERROR: invalid number...try again", 0, true);
 }
@@ -258,4 +269,16 @@ void AskMeView::ShowQuestionNotFound() const {
 
 void AskMeView::ShowUserNotFound() const {
     print("ERROR: user not found", 0, true);
+}
+
+void AskMeView::ShowAnswerQuestionNotAllowed() const {
+    print("ERROR: you cannot answer questions that are not directed to you", 0, true);
+}
+
+void AskMeView::ShowDeleteQuestionNotAllowed() const {
+    print("ERROR: you cannot delete questions you did not ask", 0, true);
+}
+
+void AskMeView::ShowSelfQuestionNotAllowed() const {
+    print("ERROR: you cannot ask questions to yourself", 0, true);
 }

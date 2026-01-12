@@ -47,6 +47,8 @@ public:
 
     [[nodiscard]] int ShowDeleteQuestion() const;
 
+    void ShowDeleteQuestionSuccess() const;
+
     [[nodiscard]] int ShowRequestUserIdToAskQuestion() const;
 
     [[nodiscard]] bool ShowRequestAnonymousQuestion(const User& user) const;
@@ -61,9 +63,17 @@ public:
 
     [[nodiscard]] bool AnonymousQuestionsConfiguration() const;
 
+    void ShowAnonymousQuestionsConfigurationSuccess() const;
+
     void ShowWrongMainMenuInput() const;
 
     void ShowQuestionNotFound() const;
 
     void ShowUserNotFound() const;
+
+    void ShowAnswerQuestionNotAllowed() const;
+
+    void ShowDeleteQuestionNotAllowed() const;
+
+    void ShowSelfQuestionNotAllowed() const;
 };

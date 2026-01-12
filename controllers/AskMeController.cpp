@@ -101,14 +101,30 @@ void AskMeController::AnswerQuestion() const {
         askme_view.ShowQuestionNotFound();
         return;
     }
+    if (session.GetCurrentUser().value().GetId() != question.value().GetToUserId()) {
+        askme_view.ShowAnswerQuestionNotAllowed();
+        return;
+    }
     std::string answer = askme_view.ShowQuestionToAnswer(question.value());
     question_service.AnswerQuestion(question_id, answer);
 }
 
 void AskMeController::DeleteQuestion() const {
     int question_id = askme_view.ShowDeleteQuestion();
+    auto question = question_service.FindQuestion(question_id);
+    if (!question) {
+        askme_view.ShowQuestionNotFound();
+        return;
+    }
+    if (session.GetCurrentUser().value().GetId() != question.value().GetFromUserId()) {
+        askme_view.ShowDeleteQuestionNotAllowed();
+        return;
+    }
     if (!question_service.DeleteQuestion(question_id)) {
         askme_view.ShowQuestionNotFound();
+    }
+    else {
+        askme_view.ShowDeleteQuestionSuccess();
     }
 }
 
@@ -120,6 +136,10 @@ void AskMeController::AskQuestion() const {
     auto user = user_service.FindUser(user_id);
     if (!user) {
         askme_view.ShowUserNotFound();
+        return;
+    }
+    if (session.GetCurrentUser().value().GetId() == user.value().GetId()) {
+        askme_view.ShowSelfQuestionNotAllowed();
         return;
     }
     bool is_anonymous = askme_view.ShowRequestAnonymousQuestion(user.value());
@@ -152,6 +172,9 @@ void AskMeController::AnonymousQuestionsConfiguration() const {
     bool done = user_service.SetAllowAnonymousQuestions(current_userid, allow_anonymous_questions);
     if (!done) {
         askme_view.ShowUserNotFound();
+    }
+    else {
+        askme_view.ShowAnonymousQuestionsConfigurationSuccess();
     }
 }
 
