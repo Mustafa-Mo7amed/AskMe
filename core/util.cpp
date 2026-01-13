@@ -79,7 +79,7 @@ namespace util {
 
     std::vector<std::string> LoadFile(const std::string& filename) {
         // creates the file if it doesn't exist
-        std::ofstream out("users.txt", std::ios::app);
+        std::ofstream out(filename, std::ios::app);
         out.close();
 
         std::ifstream in(filename);
@@ -112,6 +112,7 @@ namespace util {
         for (const std::string& i : lines) {
             out << i << '\n';
         }
+        out.flush();
         out.close();
     }
 
@@ -121,6 +122,7 @@ namespace util {
             throw std::runtime_error("Failed to open file: " + filename);
         }
         out << line << '\n';
+        out.flush();
         out.close();
     }
 }

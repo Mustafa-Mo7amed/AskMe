@@ -69,11 +69,12 @@ QuestionsRepository::QuestionsRepository() {
     LoadQuestions();
 }
 
-const std::map<int, Question>& QuestionsRepository::GetAllQuestions() const {
+const std::map<int, Question>& QuestionsRepository::GetAllQuestions() {
+    LoadQuestions();
     return questions;
 }
 
-std::map<int, Question> QuestionsRepository::GetAllAnsweredQuestions() const {
+std::map<int, Question> QuestionsRepository::GetAllAnsweredQuestions() {
     std::map<int, Question> answered_questions;
     for (auto& [id, question] : questions) {
         if (question.IsAnswered()) {
@@ -83,7 +84,8 @@ std::map<int, Question> QuestionsRepository::GetAllAnsweredQuestions() const {
     return answered_questions;
 }
 
-std::map<int, Question> QuestionsRepository::GetQuestionsFromUser(int user_id) const {
+std::map<int, Question> QuestionsRepository::GetQuestionsFromUser(int user_id) {
+    LoadQuestions();
     std::map<int, Question> user_questions;
     for (auto& [id, question] : questions) {
         if (question.GetFromUserId() == user_id) {
@@ -93,7 +95,8 @@ std::map<int, Question> QuestionsRepository::GetQuestionsFromUser(int user_id) c
     return user_questions;
 }
 
-std::map<int, Question> QuestionsRepository::GetQuestionsToUser(int user_id) const {
+std::map<int, Question> QuestionsRepository::GetQuestionsToUser(int user_id) {
+    LoadQuestions();
     std::map<int, Question> user_questions;
     for (auto& [id, question] : questions) {
         if (question.GetToUserId() == user_id) {
@@ -103,7 +106,8 @@ std::map<int, Question> QuestionsRepository::GetQuestionsToUser(int user_id) con
     return user_questions;
 }
 
-std::optional<Question> QuestionsRepository::FindById(int id) const {
+std::optional<Question> QuestionsRepository::FindById(int id) {
+    LoadQuestions();
     auto it = questions.find(id);
     if (it == questions.end())
         return std::nullopt;
@@ -111,6 +115,7 @@ std::optional<Question> QuestionsRepository::FindById(int id) const {
 }
 
 bool QuestionsRepository::DeleteQuestion(int id) {
+    LoadQuestions();
     auto it = questions.find(id);
     if (it == questions.end())
         return false;
@@ -141,6 +146,7 @@ std::optional<Question> QuestionsRepository::AnswerQuestion(int question_id, std
     if (util::IsEmptyOrBlank(answer_text)) {
         throw std::invalid_argument("answer text cannot be empty");
     }
+    LoadQuestions();
     auto it = questions.find(question_id);
     if (it == questions.end()) {
         return std::nullopt;

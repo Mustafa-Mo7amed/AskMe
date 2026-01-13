@@ -65,9 +65,13 @@ std::vector<std::string> UsersRepository::PrepareToSave(const std::vector<User>&
     return lines;
 }
 
-const std::map<int, User>& UsersRepository::GetAllUsers() const { return users; }
+const std::map<int, User>& UsersRepository::GetAllUsers() {
+    LoadUsers();
+    return users;
+}
 
-std::optional<User> UsersRepository::FindById(int id) const {
+std::optional<User> UsersRepository::FindById(int id) {
+    LoadUsers();
     auto it = users.find(id);
     if (it == users.end()) {
         return std::nullopt;
@@ -88,6 +92,7 @@ const User& UsersRepository::AddUser(std::string name, std::string password, std
 }
 
 bool UsersRepository::SetAllowAnonymousQuestions(int user_id, bool allow) {
+    LoadUsers();
     auto it = users.find(user_id);
     if (it == users.end())
         return false;

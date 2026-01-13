@@ -192,11 +192,9 @@ int AskMeView::ShowRequestQuestionIdToAnswer() const {
 
 std::string AskMeView::ShowQuestionToAnswer(const Question& question) const {
     print(format_question(question, question.IsAnswered()), 0, true);
-    std::string answered_warning;
     if (question.IsAnswered()) {
-        answered_warning = "WARNING: already answered. Answer will be updated!\n";
+        print("WARNING: already answered. Answer will be updated!", 0, true);
     }
-    print(answered_warning);
     return get_string("Answer:");
 }
 

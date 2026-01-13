@@ -22,15 +22,15 @@ class QuestionsRepository {
 
 public:
     QuestionsRepository();
-    [[nodiscard]] const std::map<int, Question>& GetAllQuestions() const;
+    [[nodiscard]] const std::map<int, Question>& GetAllQuestions();
 
-    [[nodiscard]] std::map<int, Question> GetAllAnsweredQuestions() const;
+    [[nodiscard]] std::map<int, Question> GetAllAnsweredQuestions();
 
-    [[nodiscard]] std::map<int, Question> GetQuestionsFromUser(int user_id) const;
+    [[nodiscard]] std::map<int, Question> GetQuestionsFromUser(int user_id);
 
-    [[nodiscard]] std::map<int, Question> GetQuestionsToUser(int user_id) const;
+    [[nodiscard]] std::map<int, Question> GetQuestionsToUser(int user_id);
 
-    [[nodiscard]] std::optional<Question> FindById(int id) const;
+    [[nodiscard]] std::optional<Question> FindById(int id);
 
     bool DeleteQuestion(int id);
 

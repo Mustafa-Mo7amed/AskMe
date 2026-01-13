@@ -22,9 +22,9 @@ class UsersRepository {
 
 public:
     UsersRepository();
-    [[nodiscard]] const std::map<int, User>& GetAllUsers() const;
+    [[nodiscard]] const std::map<int, User>& GetAllUsers();
 
-    [[nodiscard]] std::optional<User> FindById(int id) const;
+    [[nodiscard]] std::optional<User> FindById(int id);
 
     const User& AddUser(std::string name, std::string password, std::string email, bool allow_anonymous_questions);
 

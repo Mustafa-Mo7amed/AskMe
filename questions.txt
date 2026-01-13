@@ -1,0 +1,6 @@
+101|-1|101|102|are you a CS student ?|close enough. I'm an IT student.|0|
+102|101|101|102|anyways I heard you're a web developer, is that true ?|well, yeah|0|
+103|102|101|102|you good at what you do ?|I'm great at what I do!!|0|
+104|-1|101|102|hey I don't know if you remember me, but we've met long ago. anyways I know you're a great web developer. do you take freelance project ?|yes, do you need a site for a business or is it for personal use ?|0|
+105|-1|102|101|are you a dentist ?|yes, I'm a dentist.|0|
+106|104|101|102|It's an e-commerce. how long does it usually takes to develop ?||0|
