@@ -187,7 +187,7 @@ void AskMeView::ShowQuestionsFromMe(const std::map<int, Question>& questions) co
 }
 
 int AskMeView::ShowRequestQuestionIdToAnswer() const {
-    return get_int("Enter Question id or -1 for a new question:");
+    return get_int("Enter Question id or -1 to cancel:");
 }
 
 std::string AskMeView::ShowQuestionToAnswer(const Question& question) const {

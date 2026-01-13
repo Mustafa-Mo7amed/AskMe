@@ -1,19 +1,27 @@
 #pragma once
 #include <map>
+#include <vector>
 #include <optional>
 #include "models/Question.h"
 
 class QuestionsRepository {
+    static const std::string DATA_FILENAME;
+
     static int LastId;
     std::map<int, Question> questions;
 
-    void LoadUsers();
+    void LoadQuestions();
 
     void SaveChanges();
 
     [[nodiscard]] static int GenerateId();
 
+    std::string QuestionToLine(const Question& question);
+
+    std::vector<std::string> PrepareToSave(const std::vector<Question>& questions);
+
 public:
+    QuestionsRepository();
     [[nodiscard]] const std::map<int, Question>& GetAllQuestions() const;
 
     [[nodiscard]] std::map<int, Question> GetAllAnsweredQuestions() const;

@@ -7,7 +7,6 @@
 
 const std::string UsersRepository::DATA_FILENAME = "users.txt";
 
-// TODO: should be the last user's id
 int UsersRepository::LastId = 100;
 
 int UsersRepository::GenerateId() {
@@ -43,7 +42,7 @@ void UsersRepository::LoadUsers() {
 
 void UsersRepository::SaveChanges() {
     auto allUsers = util::MapValues(users);
-    util::WriteLinesToFile(DATA_FILENAME, PrepareToSave(util::MapValues(users)));
+    util::WriteLinesToFile(DATA_FILENAME, PrepareToSave(allUsers));
 }
 
 std::string UsersRepository::UserToLine(const User& user) {

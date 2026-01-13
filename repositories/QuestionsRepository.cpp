@@ -1,9 +1,12 @@
 #include <stdexcept>
 #include <optional>
+#include <vector>
+#include <sstream>
 #include "QuestionsRepository.h"
 #include "core/util.h"
 
-// TODO: should be the last question's id
+const std::string QuestionsRepository::DATA_FILENAME = "questions.txt";
+
 int QuestionsRepository::LastId = 100;
 
 int QuestionsRepository::GenerateId() {
@@ -11,9 +14,60 @@ int QuestionsRepository::GenerateId() {
     return LastId;
 }
 
-void QuestionsRepository::LoadUsers() {}
+void QuestionsRepository::LoadQuestions() {
+    auto allQuestions = util::LoadFile(DATA_FILENAME);
+    questions.clear();
+    for (const std::string& line : allQuestions) {
+        auto fields = util::SplitEscaped(line);
+        if (fields.empty())
+            continue;
+        int id = stoi(fields[0]);
+        int parent_id = stoi(fields[1]);
+        int to_user_id = stoi(fields[2]);
+        int from_user_id = stoi(fields[3]);
+        std::string question_text = fields[4];
+        std::string answer_text = fields[5];
+        bool is_anonymous = stoi(fields[6]);
+        Question question(id, std::move(question_text), std::move(answer_text), to_user_id, from_user_id, parent_id, is_anonymous);
+        auto [it, inserted] = questions.emplace(question.GetId(), std::move(question));
+        if (!inserted) {
+            throw std::runtime_error("Question with same ID already exists");
+        }
+    }
+    if (!questions.empty())
+        LastId = prev(questions.end())->first;
+}
 
-void QuestionsRepository::SaveChanges() {}
+void QuestionsRepository::SaveChanges() {
+    auto allQuestions = util::MapValues(questions);
+    util::WriteLinesToFile(DATA_FILENAME, PrepareToSave(allQuestions));
+}
+
+std::string QuestionsRepository::QuestionToLine(const Question& question) {
+    std::ostringstream os;
+    os << question.GetId() << '|';
+    os << question.GetParentId() << '|';
+    os << question.GetToUserId() << '|';
+    os << question.GetFromUserId() << '|';
+    os << question.GetQuestionText() << '|';
+    os << question.GetAnswerText() << '|';
+    os << question.IsAnonymous() << '|';
+    return os.str();
+}
+
+std::vector<std::string> QuestionsRepository::PrepareToSave(const std::vector<Question>& questions) {
+    std::vector<std::string> lines;
+    lines.reserve(questions.size());
+
+    for (const Question& q : questions) {
+        lines.emplace_back(QuestionToLine(q));
+    }
+    return lines;
+}
+
+QuestionsRepository::QuestionsRepository() {
+    LoadQuestions();
+}
 
 const std::map<int, Question>& QuestionsRepository::GetAllQuestions() const {
     return questions;
@@ -61,11 +115,13 @@ bool QuestionsRepository::DeleteQuestion(int id) {
     if (it == questions.end())
         return false;
     questions.erase(it);
+    SaveChanges();
     return true;
 }
 
 const Question& QuestionsRepository::AddQuestion(Question question) {
     auto [it, inserted] = questions.emplace(question.GetId(), question);
+    util::AddLineToFile(DATA_FILENAME, QuestionToLine(question));
     return it->second;
 }
 
@@ -77,6 +133,7 @@ const Question& QuestionsRepository::AddQuestion(int parent_id,
     Question question(GenerateId(), std::move(question_text), to_user_id,
                       from_user_id, parent_id, is_anonymous);
     auto [it, inserted] = questions.emplace(question.GetId(), question);
+    util::AddLineToFile(DATA_FILENAME, QuestionToLine(question));
     return it->second;
 }
 
@@ -89,5 +146,6 @@ std::optional<Question> QuestionsRepository::AnswerQuestion(int question_id, std
         return std::nullopt;
     }
     it->second.SetAnswerText(std::move(answer_text));
+    SaveChanges();
     return it->second;
 }
