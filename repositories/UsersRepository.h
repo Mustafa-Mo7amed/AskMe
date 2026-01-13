@@ -1,18 +1,27 @@
 #pragma once
 #include <map>
+#include <vector>
 #include "models/User.h"
 
 class UsersRepository {
+    static const std::string DATA_FILENAME;
+
     static int LastId;
+
     std::map<int, User> users;
 
     void LoadUsers();
 
     void SaveChanges();
 
-    [[nodiscard]] static int GenerateId();
+    static std::string UserToLine(const User& user);
+
+    static std::vector<std::string> PrepareToSave(const std::vector<User>& users);
+
+    static int GenerateId();
 
 public:
+    UsersRepository();
     [[nodiscard]] const std::map<int, User>& GetAllUsers() const;
 
     [[nodiscard]] std::optional<User> FindById(int id) const;

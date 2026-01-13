@@ -1,15 +1,5 @@
 #include "QuestionService.h"
 
-std::vector<Question> QuestionService::QuestionMapValues(const std::map<int, Question>& map) const {
-    const std::map<int, Question>& questions_map = map;
-    std::vector<Question> questions;
-    questions.reserve(questions_map.size());
-    for (auto& [id, question] : questions_map) {
-        questions.emplace_back(question);
-    }
-    return questions;
-}
-
 QuestionService::QuestionService(QuestionsRepository& repo): repository(repo) {}
 
 std::map<int, Question> QuestionService::GetFeed() const {

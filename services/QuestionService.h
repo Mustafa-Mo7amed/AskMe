@@ -8,8 +8,6 @@ class QuestionService {
 public:
     explicit QuestionService(QuestionsRepository& repo);
 
-    [[nodiscard]] std::vector<Question> QuestionMapValues(const std::map<int, Question>& map) const;
-
     [[nodiscard]] std::map<int, Question> GetFeed() const;
 
     [[nodiscard]] std::map<int, Question> GetQuestionsToUser(int user_id) const;

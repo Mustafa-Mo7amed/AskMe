@@ -3,16 +3,6 @@
 
 UserService::UserService(UsersRepository& repo): repository(repo) {}
 
-std::vector<User> UserService::UserMapValues(const std::map<int, User>& map) const {
-    const std::map<int, User>& users_map = map;
-    std::vector<User> users;
-    users.reserve(users_map.size());
-    for (auto& [id, user] : users_map) {
-        users.emplace_back(user);
-    }
-    return users;
-}
-
 const std::map<int, User>& UserService::GetAllUsers() const { return repository.GetAllUsers(); }
 
 std::optional<User> UserService::FindUser(int id) const {

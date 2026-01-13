@@ -4,7 +4,7 @@
 #include <map>
 #include <limits>
 #include "AskMeView.h"
-#include "core/Validator.h"
+#include "core/util.h"
 
 int AskMeView::get_int(const std::string& message, int min_value, int max_value) {
     int value;
@@ -28,9 +28,9 @@ std::string AskMeView::get_string(const std::string& message, int max_size) {
     do {
         print(message);
         std::getline(std::cin, input);
-        if (input.size() > max_size)
+        if (input.size() > max_size || util::IsEmptyOrBlank(input))
             print("ERROR: invalid input...try again", 0, true);
-    } while (input.size() > max_size);
+    } while (input.size() > max_size || util::IsEmptyOrBlank(input));
     return input;
 }
 
@@ -114,15 +114,13 @@ int AskMeView::ShowAuthMenu() const {
 UserSignUpData AskMeView::ShowSignUpFrom() const {
     print("Welcome to AskMe:", 0, true);
 
-    print("Enter your name:", 0);
-    std::string name = get_string();
+    std::string name = get_string("Enter your name:");
 
     std::string email;
     bool valid_email;
     do {
-        print("Enter your email:");
-        email = get_string();
-        valid_email = Validator::IsValidEmail(email);
+        email = get_string("Enter your email:");
+        valid_email = util::IsValidEmail(email);
         if (!valid_email) {
             print("ERROR: invalid email...try again", 0, true);
         }
@@ -131,16 +129,14 @@ UserSignUpData AskMeView::ShowSignUpFrom() const {
     std::string password;
     bool valid_password;
     do {
-        print("Enter your password (choose a strong one):");
-        password = get_string();
-        valid_password = Validator::IsValidPassword(password);
+        password = get_string("Enter your password (choose a strong one):");
+        valid_password = util::IsValidPassword(password);
         if (!valid_password) {
             print("ERROR: invalid password...try again", 0, true);
         }
     } while (!valid_password);
 
-    print("Would you like to allow people to ask anonymously ? (yes/no)");
-    bool allow_anonymous_questions = checkAnswerYesNo(std::move(get_string()));
+    bool allow_anonymous_questions = checkAnswerYesNo(std::move(get_string("Would you like to allow people to ask anonymously ? (yes/no)")));
 
     return {std::move(name), std::move(email), std::move(password), allow_anonymous_questions};
 }
@@ -154,11 +150,9 @@ void AskMeView::ShowUserIdAfterSignUp(int id) const {
 UserLoginData AskMeView::ShowLoginForm() const {
     print("Welcome back!", 0, true);
 
-    print("Enter your id:");
-    int id = get_int();
+    int id = get_int("Enter your id:");
 
-    print("Enter your password:");
-    std::string password = get_string();
+    std::string password = get_string("Enter your password:");
 
     return {id, std::move(password)};
 }
@@ -193,8 +187,7 @@ void AskMeView::ShowQuestionsFromMe(const std::map<int, Question>& questions) co
 }
 
 int AskMeView::ShowRequestQuestionIdToAnswer() const {
-    print("Enter Question id or -1 for a new question:");
-    return get_int();
+    return get_int("Enter Question id or -1 for a new question:");
 }
 
 std::string AskMeView::ShowQuestionToAnswer(const Question& question) const {
@@ -203,13 +196,12 @@ std::string AskMeView::ShowQuestionToAnswer(const Question& question) const {
     if (question.IsAnswered()) {
         answered_warning = "WARNING: already answered. Answer will be updated!\n";
     }
-    print(std::format("{}Answer:", answered_warning));
-    return get_string();
+    print(answered_warning);
+    return get_string("Answer:");
 }
 
 int AskMeView::ShowDeleteQuestion() const {
-    print("Enter Question id or -1 to cancel:");
-    return get_int();
+    return get_int("Enter Question id or -1 to cancel:");
 }
 
 void AskMeView::ShowDeleteQuestionSuccess() const {
@@ -217,8 +209,7 @@ void AskMeView::ShowDeleteQuestionSuccess() const {
 }
 
 int AskMeView::ShowRequestUserIdToAskQuestion() const {
-    print("Enter User id or -1 to cancel:");
-    return get_int();
+    return get_int("Enter User id or -1 to cancel:");
 }
 
 bool AskMeView::ShowRequestAnonymousQuestion(const User& user) const {
@@ -226,18 +217,15 @@ bool AskMeView::ShowRequestAnonymousQuestion(const User& user) const {
         print("NOTE: anonymous questions are not allowed for this user.", 0, true);
         return false;
     }
-    print("Would you like to ask anonymously ? (yes/no):");
-    return checkAnswerYesNo(std::move(get_string()));
+    return checkAnswerYesNo(std::move(get_string("Would you like to ask anonymously ? (yes/no):")));
 }
 
 int AskMeView::ShowRequestQuestionIdForThread() const {
-    print("For thread question enter Question id or -1 for a new question:");
-    return get_int();
+    return get_int("For thread question enter Question id or -1 for a new question:");
 }
 
 std::string AskMeView::ShowRequestQuestionText() const {
-    print("Enter question text:");
-    return get_string();
+    return get_string("Enter question text:");
 }
 
 void AskMeView::ShowSystemUsers(const std::vector<User>& users) const {
@@ -251,8 +239,7 @@ void AskMeView::ShowFeed(const std::map<int, Question>& questions) const {
 }
 
 bool AskMeView::AnonymousQuestionsConfiguration() const {
-    print("Would you like to allow people to ask anonymously ? (yes/no):");
-    return checkAnswerYesNo(std::move(get_string()));
+    return checkAnswerYesNo(std::move(get_string("Would you like to allow people to ask anonymously ? (yes/no):")));
 }
 
 void AskMeView::ShowAnonymousQuestionsConfigurationSuccess() const {

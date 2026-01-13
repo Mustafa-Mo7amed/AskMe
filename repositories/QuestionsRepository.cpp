@@ -1,7 +1,7 @@
 #include <stdexcept>
 #include <optional>
 #include "QuestionsRepository.h"
-#include "core/Validator.h"
+#include "core/util.h"
 
 // TODO: should be the last question's id
 int QuestionsRepository::LastId = 100;
@@ -81,7 +81,7 @@ const Question& QuestionsRepository::AddQuestion(int parent_id,
 }
 
 std::optional<Question> QuestionsRepository::AnswerQuestion(int question_id, std::string answer_text) {
-    if (Validator::IsEmptyOrBlank(answer_text)) {
+    if (util::IsEmptyOrBlank(answer_text)) {
         throw std::invalid_argument("answer text cannot be empty");
     }
     auto it = questions.find(question_id);

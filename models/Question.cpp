@@ -1,6 +1,6 @@
 #include <stdexcept>
 #include "Question.h"
-#include "core/Validator.h"
+#include "core/util.h"
 
 Question::Question(int id, std::string question_text, int to_user_id, int from_user_id, int parent_id,
                    bool is_anonymous): Id(id),
@@ -29,9 +29,6 @@ const std::string& Question::GetQuestionText() const { return QuestionText; }
 const std::string& Question::GetAnswerText() const { return AnswerText; }
 
 void Question::SetAnswerText(std::string answer_text) {
-    if (Validator::IsEmptyOrBlank(answer_text)) {
-        throw std::invalid_argument("Answer Text cannot be empty or blank");
-    }
     AnswerText = std::move(answer_text);
 }
 
@@ -41,4 +38,4 @@ int Question::GetFromUserId() const { return FromUserId; }
 
 bool Question::IsAnonymous() const { return IS_ANONYMOUS; }
 
-bool Question::IsAnswered() const { return !Validator::IsEmptyOrBlank(GetAnswerText()); }
+bool Question::IsAnswered() const { return !util::IsEmptyOrBlank(GetAnswerText()); }

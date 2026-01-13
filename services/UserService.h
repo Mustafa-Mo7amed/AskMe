@@ -11,8 +11,6 @@ class UserService {
 public:
     explicit UserService(UsersRepository& repo);
 
-    [[nodiscard]] std::vector<User> UserMapValues(const std::map<int, User>& map) const;
-
     [[nodiscard]] const std::map<int, User>& GetAllUsers() const;
 
     [[nodiscard]] std::optional<User> FindUser(int id) const;

@@ -1,4 +1,5 @@
 #include "AskMeController.h"
+#include "core/util.h"
 
 AskMeController::AskMeController(UsersRepository& user_repo,
                                  QuestionsRepository& questions_repo): user_service(user_repo),
@@ -157,7 +158,7 @@ void AskMeController::AskQuestion() const {
 }
 
 void AskMeController::SystemUsers() const {
-    auto users = user_service.UserMapValues(user_service.GetAllUsers());
+    auto users = util::MapValues(user_service.GetAllUsers());
     askme_view.ShowSystemUsers(users);
 }
 
