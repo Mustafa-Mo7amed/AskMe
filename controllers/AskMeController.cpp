@@ -83,13 +83,15 @@ void AskMeController::MainMenu() {
 void AskMeController::QuestionsToMe() const {
     int current_userid = session.GetCurrentUser().value().GetId();
     auto questions = question_service.GetQuestionsToUser(current_userid);
-    askme_view.ShowQuestionsToMe(questions);
+    auto users = user_service.GetAllUsers();
+    askme_view.ShowQuestionsToMe(questions, users);
 }
 
 void AskMeController::QuestionsFromMe() const {
     int current_userid = session.GetCurrentUser().value().GetId();
     auto questions = question_service.GetQuestionsFromUser(current_userid);
-    askme_view.ShowQuestionsFromMe(questions);
+    auto users = user_service.GetAllUsers();
+    askme_view.ShowQuestionsFromMe(questions, users);
 }
 
 void AskMeController::AnswerQuestion() const {
@@ -106,7 +108,8 @@ void AskMeController::AnswerQuestion() const {
         askme_view.ShowAnswerQuestionNotAllowed();
         return;
     }
-    std::string answer = askme_view.ShowQuestionToAnswer(question.value());
+    auto users = user_service.GetAllUsers();
+    std::string answer = askme_view.ShowQuestionToAnswer(question.value(), users);
     question_service.AnswerQuestion(question_id, answer);
 }
 
@@ -164,7 +167,8 @@ void AskMeController::SystemUsers() const {
 
 void AskMeController::Feed() const {
     auto questions = question_service.GetFeed();
-    askme_view.ShowFeed(questions);
+    auto users = user_service.GetAllUsers();
+    askme_view.ShowFeed(questions, users);
 }
 
 void AskMeController::AnonymousQuestionsConfiguration() const {

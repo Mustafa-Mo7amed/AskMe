@@ -47,11 +47,11 @@ void UsersRepository::SaveChanges() {
 
 std::string UsersRepository::UserToLine(const User& user) {
     std::ostringstream os;
-    os << user.GetId() << '|';
-    os << user.GetName() << '|';
-    os << user.GetPassword() << '|';
-    os << user.GetEmail() << '|';
-    os << user.IsAnonymousQuestionsAllowed() << '|';
+    os << util::Escape(std::to_string(user.GetId())) << '|';
+    os << util::Escape(user.GetName()) << '|';
+    os << util::Escape(user.GetPassword()) << '|';
+    os << util::Escape(user.GetEmail()) << '|';
+    os << util::Escape(std::to_string(user.IsAnonymousQuestionsAllowed())) << '|';
     return os.str();
 }
 

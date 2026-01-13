@@ -15,12 +15,13 @@ class AskMeView {
 
     static void print(const std::string& message, int depth = 0, bool newline = false);
 
-    static void printQuestionThread(int node, const std::map<int, Question>& questions,
+    static void printQuestionThread(int node, const std::map<int, Question>& questions, const std::map<int, User>& users,
                                     const std::map<int, std::vector<int>>& adj, int depth, bool only_answered = false);
 
-    static void printQuestionsList(const std::map<int, Question>& questions, bool only_answered = false);
+    static void printQuestionsList(const std::map<int, Question>& questions, const std::map<int, User>& users, bool only_answered = false);
 
-    [[nodiscard]] static std::string format_question(const Question& question, bool include_answer, int depth = 0);
+    [[nodiscard]] static std::string format_question(const Question& question, const std::map<int, User>& users,
+                                                     bool include_answer, int depth = 0);
 
     [[nodiscard]] static bool checkAnswerYesNo(std::string answer);
 
@@ -37,13 +38,13 @@ public:
 
     [[nodiscard]] int ShowMainMenu() const;
 
-    void ShowQuestionsToMe(const std::map<int, Question>& questions) const;
+    void ShowQuestionsToMe(const std::map<int, Question>& questions, const std::map<int, User>& users) const;
 
-    void ShowQuestionsFromMe(const std::map<int, Question>& questions) const;
+    void ShowQuestionsFromMe(const std::map<int, Question>& questions, const std::map<int, User>& users) const;
 
     [[nodiscard]] int ShowRequestQuestionIdToAnswer() const;
 
-    [[nodiscard]] std::string ShowQuestionToAnswer(const Question& question) const;
+    [[nodiscard]] std::string ShowQuestionToAnswer(const Question& question, const std::map<int, User>& users) const;
 
     [[nodiscard]] int ShowDeleteQuestion() const;
 
@@ -59,7 +60,7 @@ public:
 
     void ShowSystemUsers(const std::vector<User>& users) const;
 
-    void ShowFeed(const std::map<int, Question>& questions) const;
+    void ShowFeed(const std::map<int, Question>& questions, const std::map<int, User>& users) const;
 
     [[nodiscard]] bool AnonymousQuestionsConfiguration() const;
 

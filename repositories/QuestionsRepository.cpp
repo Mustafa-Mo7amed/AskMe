@@ -45,13 +45,13 @@ void QuestionsRepository::SaveChanges() {
 
 std::string QuestionsRepository::QuestionToLine(const Question& question) {
     std::ostringstream os;
-    os << question.GetId() << '|';
-    os << question.GetParentId() << '|';
-    os << question.GetToUserId() << '|';
-    os << question.GetFromUserId() << '|';
-    os << question.GetQuestionText() << '|';
-    os << question.GetAnswerText() << '|';
-    os << question.IsAnonymous() << '|';
+    os << util::Escape(std::to_string(question.GetId())) << '|';
+    os << util::Escape(std::to_string(question.GetParentId())) << '|';
+    os << util::Escape(std::to_string(question.GetToUserId())) << '|';
+    os << util::Escape(std::to_string(question.GetFromUserId())) << '|';
+    os << util::Escape(question.GetQuestionText()) << '|';
+    os << util::Escape(question.GetAnswerText()) << '|';
+    os << util::Escape(std::to_string(question.IsAnonymous())) << '|';
     return os.str();
 }
 

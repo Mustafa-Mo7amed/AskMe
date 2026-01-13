@@ -42,7 +42,7 @@ void AskMeView::print(const std::string& message, int depth, bool newLine) {
         std::cout << '\n';
 }
 
-void AskMeView::printQuestionThread(int node, const std::map<int, Question>& questions,
+void AskMeView::printQuestionThread(int node, const std::map<int, Question>& questions, const std::map<int, User>& users,
                                     const std::map<int, std::vector<int>>& adj, int depth, bool only_answered) {
     if (!questions.contains(node)) {
         return;
@@ -50,16 +50,16 @@ void AskMeView::printQuestionThread(int node, const std::map<int, Question>& que
     if (only_answered && !questions.at(node).IsAnswered()) {
         return;
     }
-    print(format_question(questions.at(node), questions.at(node).IsAnswered(), depth), 0, true);
+    print(format_question(questions.at(node), users, questions.at(node).IsAnswered(), depth), 0, true);
     if (!adj.contains(node)) {
         return;
     }
     for (int child : adj.at(node)) {
-        printQuestionThread(child, questions, adj, depth + 1, only_answered);
+        printQuestionThread(child, questions, users, adj, depth + 1, only_answered);
     }
 }
 
-void AskMeView::printQuestionsList(const std::map<int, Question>& questions, bool only_answered) {
+void AskMeView::printQuestionsList(const std::map<int, Question>& questions, const std::map<int, User>& users, bool only_answered) {
     std::map<int, std::vector<int>> adj;
     for (const auto& [id, question] : questions) {
         adj[question.GetParentId()].emplace_back(id);
@@ -67,21 +67,27 @@ void AskMeView::printQuestionsList(const std::map<int, Question>& questions, boo
 
     for (const auto& [id, question] : questions) {
         if (question.GetParentId() == -1 || !questions.contains(question.GetParentId())) {
-            printQuestionThread(id, questions, adj, 0, only_answered);
+            printQuestionThread(id, questions, users, adj, 0, only_answered);
         }
     }
 }
 
-std::string AskMeView::format_question(const Question& question, bool include_answer, int depth) {
+std::string AskMeView::format_question(const Question& question, const std::map<int, User>& users, bool include_answer, int depth) {
     static auto indentation = [&](int d) -> std::string {
         std::string s;
         while (d--)
             s.push_back('\t');
         return s;
     };
+    static auto to_upper = [&](std::string s) {
+        for (char& c : s)
+            c = toupper(c);
+        return s;
+    };
     std::string from_user;
     if (!question.IsAnonymous()) {
-        from_user = std::format(" from user id({})", question.GetFromUserId());
+        std::string user_name = to_upper(users.at(question.GetFromUserId()).GetName());
+        from_user = std::format(" from {}", user_name);
     }
     std::string ret;
     if (question.GetParentId() == -1) {
@@ -177,21 +183,20 @@ int AskMeView::ShowMainMenu() const {
     return get_int("Enter a number in range 1 - 9:", 1, 9);
 }
 
-void AskMeView::ShowQuestionsToMe(const std::map<int, Question>& questions) const {
-    printQuestionsList(questions);
+void AskMeView::ShowQuestionsToMe(const std::map<int, Question>& questions, const std::map<int, User>& users) const {
+    printQuestionsList(questions, users);
 }
 
-// TODO: implement showing which questions were sent anonymously
-void AskMeView::ShowQuestionsFromMe(const std::map<int, Question>& questions) const {
-    printQuestionsList(questions);
+void AskMeView::ShowQuestionsFromMe(const std::map<int, Question>& questions, const std::map<int, User>& users) const {
+    printQuestionsList(questions, users);
 }
 
 int AskMeView::ShowRequestQuestionIdToAnswer() const {
     return get_int("Enter Question id or -1 to cancel:");
 }
 
-std::string AskMeView::ShowQuestionToAnswer(const Question& question) const {
-    print(format_question(question, question.IsAnswered()), 0, true);
+std::string AskMeView::ShowQuestionToAnswer(const Question& question, const std::map<int, User>& users) const {
+    print(format_question(question, users, question.IsAnswered()), 0, true);
     if (question.IsAnswered()) {
         print("WARNING: already answered. Answer will be updated!", 0, true);
     }
@@ -232,8 +237,8 @@ void AskMeView::ShowSystemUsers(const std::vector<User>& users) const {
     }
 }
 
-void AskMeView::ShowFeed(const std::map<int, Question>& questions) const {
-    printQuestionsList(questions, true);
+void AskMeView::ShowFeed(const std::map<int, Question>& questions, const std::map<int, User>& users) const {
+    printQuestionsList(questions, users, true);
 }
 
 bool AskMeView::AnonymousQuestionsConfiguration() const {
