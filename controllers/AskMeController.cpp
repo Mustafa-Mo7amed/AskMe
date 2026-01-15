@@ -9,13 +9,15 @@ void AskMeController::Run() {
     AuthMenu();
 }
 
-void AskMeController::AuthMenu() {
-    int choice = askme_view.ShowAuthMenu();
-    if (choice == 1) {
-        Login();
-    }
-    else {
-        SignUp();
+[[noreturn]] void AskMeController::AuthMenu() {
+    while (true) {
+        int choice = askme_view.ShowAuthMenu();
+        if (choice == 1) {
+            Login();
+        }
+        else {
+            SignUp();
+        }
     }
 }
 
@@ -47,7 +49,7 @@ void AskMeController::Login() {
     MainMenu();
 }
 
-void AskMeController::MainMenu() {
+[[noreturn]] void AskMeController::MainMenu() {
     while (true) {
         int choice = askme_view.ShowMainMenu();
         switch (choice) {

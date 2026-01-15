@@ -17,13 +17,13 @@ public:
 
     void Run();
 
-    void AuthMenu();
+    [[noreturn]] void AuthMenu();
 
     void SignUp();
 
     void Login();
 
-    void MainMenu();
+    [[noreturn]] void MainMenu();
 
     void QuestionsToMe() const;
 

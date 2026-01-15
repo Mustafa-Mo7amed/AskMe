@@ -9,7 +9,7 @@ std::optional<User> UserService::FindUser(int id) const {
     return repository.FindById(id);
 }
 
-std::optional<User> UserService::FindUser(const std::string& email) const {
+std::optional<User> UserService::FindUser(std::string email) const {
     return repository.FindByEmail(email);
 }
 

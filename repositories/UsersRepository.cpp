@@ -79,7 +79,7 @@ std::optional<User> UsersRepository::FindById(int id) {
     return it->second;
 }
 
-std::optional<User> UsersRepository::FindByEmail(const std::string& email) {
+std::optional<User> UsersRepository::FindByEmail(std::string email) {
     LoadUsers();
     for (auto [id, user] : users) {
         if (user.GetEmail() == email)

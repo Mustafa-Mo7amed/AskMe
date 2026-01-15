@@ -27,7 +27,7 @@ public:
 
     [[nodiscard]] std::optional<User> FindById(int id);
 
-    [[nodiscard]] std::optional<User> FindByEmail(const std::string& email);
+    [[nodiscard]] std::optional<User> FindByEmail(std::string email);
 
     const User& AddUser(std::string name, std::string password, std::string email, bool allow_anonymous_questions);
 
