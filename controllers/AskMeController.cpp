@@ -23,6 +23,10 @@ void AskMeController::SignUp() {
     UserSignUpData signup_data = askme_view.ShowSignUpFrom();
     const User& user = user_service.AddUser(signup_data.name, signup_data.password, signup_data.email,
                                             signup_data.allow_anonymous_questions);
+    if (user_service.FindUser(user.GetEmail()).has_value()) {
+        askme_view.ShowUserAlreadyExists();
+        return;
+    }
     session.Login(user);
     askme_view.ShowUserIdAfterSignUp(user.GetId());
     MainMenu();

@@ -79,6 +79,15 @@ std::optional<User> UsersRepository::FindById(int id) {
     return it->second;
 }
 
+std::optional<User> UsersRepository::FindByEmail(const std::string& email) {
+    LoadUsers();
+    for (auto [id, user] : users) {
+        if (user.GetEmail() == email)
+            return user;
+    }
+    return std::nullopt;
+}
+
 const User& UsersRepository::AddUser(std::string name, std::string password, std::string email,
                                      bool allow_anonymous_questions) {
     User user(GenerateId(), std::move(name), std::move(password), std::move(email), allow_anonymous_questions);

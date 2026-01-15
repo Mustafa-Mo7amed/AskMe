@@ -15,10 +15,12 @@ class AskMeView {
 
     static void print(const std::string& message, int depth = 0, bool newline = false);
 
-    static void printQuestionThread(int node, const std::map<int, Question>& questions, const std::map<int, User>& users,
+    static void printQuestionThread(int node, const std::map<int, Question>& questions,
+                                    const std::map<int, User>& users,
                                     const std::map<int, std::vector<int>>& adj, int depth, bool only_answered = false);
 
-    static void printQuestionsList(const std::map<int, Question>& questions, const std::map<int, User>& users, bool only_answered = false);
+    static void printQuestionsList(const std::map<int, Question>& questions, const std::map<int, User>& users,
+                                   bool only_answered = false);
 
     [[nodiscard]] static std::string format_question(const Question& question, const std::map<int, User>& users,
                                                      bool include_answer, int depth = 0);
@@ -77,4 +79,6 @@ public:
     void ShowDeleteQuestionNotAllowed() const;
 
     void ShowSelfQuestionNotAllowed() const;
+
+    void ShowUserAlreadyExists() const;
 };

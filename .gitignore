@@ -20,3 +20,5 @@ CMakeLists.txt
 # Project Specific
 
 design
+users.txt
+questions.txt

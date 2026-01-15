@@ -272,3 +272,7 @@ void AskMeView::ShowDeleteQuestionNotAllowed() const {
 void AskMeView::ShowSelfQuestionNotAllowed() const {
     print("ERROR: you cannot ask questions to yourself", 0, true);
 }
+
+void AskMeView::ShowUserAlreadyExists() const {
+    print("ERROR: user with the same email is already registered", 0, true);
+}

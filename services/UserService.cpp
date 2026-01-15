@@ -9,6 +9,10 @@ std::optional<User> UserService::FindUser(int id) const {
     return repository.FindById(id);
 }
 
+std::optional<User> UserService::FindUser(const std::string& email) const {
+    return repository.FindByEmail(email);
+}
+
 const User& UserService::AddUser(std::string name, std::string password, std::string email,
                                  bool allow_anonymous_questions) const {
     return repository.AddUser(std::move(name), std::move(password), std::move(email), allow_anonymous_questions);

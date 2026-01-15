@@ -15,6 +15,8 @@ public:
 
     [[nodiscard]] std::optional<User> FindUser(int id) const;
 
+    [[nodiscard]] std::optional<User> FindUser(const std::string& email) const;
+
     [[nodiscard]] const User& AddUser(std::string name, std::string password, std::string email,
                                       bool allow_anonymous_questions) const;
 

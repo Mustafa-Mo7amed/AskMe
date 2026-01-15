@@ -1,3 +1,0 @@
-101|mostafa|123|mostafa@gmail.com|1|
-102|reem|1234|reem@gmail.com|0|
-103|mayar|12345|mayar@gmail.com|0|
