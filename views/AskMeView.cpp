@@ -47,14 +47,16 @@ void AskMeView::printQuestionThread(int node, const std::map<int, Question>& que
     if (!questions.contains(node)) {
         return;
     }
-    if (only_answered && !questions.at(node).IsAnswered()) {
+    auto currentQuestion = questions.find(node)->second;
+    if (only_answered && !currentQuestion.IsAnswered()) {
         return;
     }
-    print(format_question(questions.at(node), users, questions.at(node).IsAnswered(), depth), 0, true);
+    print(format_question(currentQuestion, users, currentQuestion.IsAnswered(), depth), 0, true);
     if (!adj.contains(node)) {
         return;
     }
-    for (int child : adj.at(node)) {
+    auto adjNodeIt = adj.find(node);
+    for (int child : adjNodeIt->second) {
         printQuestionThread(child, questions, users, adj, depth + 1, only_answered);
     }
 }
@@ -86,7 +88,8 @@ std::string AskMeView::format_question(const Question& question, const std::map<
     };
     std::string from_user;
     if (!question.IsAnonymous()) {
-        std::string user_name = to_upper(users.at(question.GetFromUserId()).GetName());
+        auto it = users.find(question.GetFromUserId());
+        std::string user_name = to_upper(it->second.GetName());
         from_user = std::format(" from {}", user_name);
     }
     std::string ret;
