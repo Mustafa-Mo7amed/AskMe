@@ -12,11 +12,6 @@ class AskMeController {
     Session session;
     AskMeView askme_view;
 
-public:
-    AskMeController(UsersRepository& user_repo, QuestionsRepository& questions_repo);
-
-    void Run();
-
     [[noreturn]] void AuthMenu();
 
     void SignUp();
@@ -42,4 +37,9 @@ public:
     void AnonymousQuestionsConfiguration() const;
 
     void Logout();
+
+public:
+    AskMeController(UsersRepository& user_repo, QuestionsRepository& questions_repo);
+
+    void Run();
 };
